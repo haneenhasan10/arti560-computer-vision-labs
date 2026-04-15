@@ -32,7 +32,8 @@ def main():
     elif args.algorithm == "rlof":
         method = cv2.optflow.calcOpticalFlowDenseRLOF
         dense_optical_flow(method, video_path)
-
+cv2.waitKey(0) 
+cv2.destroyAllWindows()
 
 if __name__ == "__main__":
     main()
