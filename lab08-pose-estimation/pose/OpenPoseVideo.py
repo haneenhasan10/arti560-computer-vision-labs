@@ -39,13 +39,19 @@ print(save_name)
 vid_writer = cv2.VideoWriter(f"{save_name}_openpose.avi",cv2.VideoWriter_fourcc('M','J','P','G'), 10, (frame.shape[1],frame.shape[0]))
 
 net = cv2.dnn.readNetFromCaffe(protoFile, weightsFile)
-if args.device == "cpu":
-    net.setPreferableBackend(cv2.dnn.DNN_TARGET_CPU)
-    print("Using CPU device")
-elif args.device == "gpu":
-    net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
-    net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
-    print("Using GPU device")
+input_source = args.video_file
+cap = cv2.VideoCapture(input_source)
+
+if not cap.isOpened():
+    print(f"Error: Could not open video file {input_source}")
+    exit()
+
+hasFrame, frame = cap.read()
+
+save_name = os.path.splitext(os.path.basename(input_source))[0]
+print(f"Processing video: {save_name}")
+
+vid_writer = cv2.VideoWriter(f"{save_name}_openpose.avi", cv2.VideoWriter_fourcc('M','J','P','G'), 10, (frame.shape[1], frame.shape[0]))
 
 while cv2.waitKey(1) < 0:
     t = time.time()
